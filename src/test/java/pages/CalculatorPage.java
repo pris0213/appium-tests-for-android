@@ -1,5 +1,6 @@
 package pages;
 
+import data.CharacterConverter;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -8,6 +9,9 @@ import org.openqa.selenium.By;
 import java.util.Queue;
 
 public class CalculatorPage extends BasePage {
+
+    @AndroidFindBy(id = "com.android.calculator2:id/dec_point")
+    private MobileElement decimalSeparator;
 
     @AndroidFindBy(id = "com.android.calculator2:id/op_div")
     private MobileElement divideOperator;
@@ -31,7 +35,7 @@ public class CalculatorPage extends BasePage {
         super(driver);
     }
 
-    public String calculate(Queue<Integer> numbers, String operation) {
+    public String calculate(Queue<Double> numbers, String operation) {
         if (numbers.size() > 0) {
             MobileElement operator = getOperator(operation);
             doOperationOnList(numbers, operator);
@@ -41,12 +45,19 @@ public class CalculatorPage extends BasePage {
         return "0";
     }
 
-    private void doOperationOnList(Queue<Integer> numbers, MobileElement operator) {
-        driver.findElement(By.id(String.format("com.android.calculator2:id/digit_%s",
-                numbers.remove().toString()))).click();
+    private void doOperationOnList(Queue<Double> numbers, MobileElement operator) {
+//        driver.findElement(By.id(String.format("com.android.calculator2:id/digit_%s",numbers.remove().toString()))).click();
+        selectNumber(numbers.remove());
         if (numbers.size() >= 1) {
             operator.click();
             doOperationOnList(numbers, operator);
+        }
+    }
+
+    private void selectNumber(double number) {
+        char[] characters = String.valueOf(number).toCharArray();
+        for (char character : characters) {
+            driver.findElement(By.id(CharacterConverter.getId(character))).click();
         }
     }
 
