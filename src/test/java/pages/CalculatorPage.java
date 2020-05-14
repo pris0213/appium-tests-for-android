@@ -3,33 +3,11 @@ package pages;
 import data.CharacterConverter;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.By;
 
 import java.util.Queue;
 
 public class CalculatorPage extends BasePage {
-
-    @AndroidFindBy(id = "com.android.calculator2:id/dec_point")
-    private MobileElement decimalSeparator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/op_div")
-    private MobileElement divideOperator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/eq")
-    private MobileElement equalsOperator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/op_sub")
-    private MobileElement minusOperator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/op_mul")
-    private MobileElement multiplyOperator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/op_add")
-    private MobileElement plusOperator;
-
-    @AndroidFindBy(id = "com.android.calculator2:id/result")
-    private MobileElement resultField;
 
     public CalculatorPage(AndroidDriver driver) {
         super(driver);
@@ -37,7 +15,10 @@ public class CalculatorPage extends BasePage {
 
     public String calculate(Queue<Double> numbers, String operation) {
         if (numbers.size() > 0) {
-            MobileElement operator = getOperator(operation);
+            MobileElement operator = findOperator(operation);
+            MobileElement equalsOperator = findOperator("equals");
+            MobileElement resultField = findOperator("result");
+
             doOperationOnList(numbers, operator);
             equalsOperator.click();
             return resultField.getText();
@@ -45,8 +26,27 @@ public class CalculatorPage extends BasePage {
         return "0";
     }
 
+    public void selectNumber(double number) {
+        char[] characters = String.valueOf(number).toCharArray();
+        for (char character : characters) {
+            driver.findElement(By.id(CharacterConverter.getId(character))).click();
+        }
+    }
+
+    public void selectOperator(String operation) {
+        driver.findElement(By.id(CharacterConverter.getId(operation))).click();
+    }
+
+    public String getOnScreenContent() {
+        return findOperator("formula").getText();
+    }
+
+    public String clear() {
+        findOperator("clear").click();
+        return findOperator("formula").getText();
+    }
+
     private void doOperationOnList(Queue<Double> numbers, MobileElement operator) {
-//        driver.findElement(By.id(String.format("com.android.calculator2:id/digit_%s",numbers.remove().toString()))).click();
         selectNumber(numbers.remove());
         if (numbers.size() >= 1) {
             operator.click();
@@ -54,23 +54,7 @@ public class CalculatorPage extends BasePage {
         }
     }
 
-    private void selectNumber(double number) {
-        char[] characters = String.valueOf(number).toCharArray();
-        for (char character : characters) {
-            driver.findElement(By.id(CharacterConverter.getId(character))).click();
-        }
-    }
-
-    private MobileElement getOperator(String operation) {
-        switch (operation) {
-            case "subtraction":
-                return minusOperator;
-            case "multiplication":
-                return multiplyOperator;
-            case "division":
-                return divideOperator;
-            default:
-                return plusOperator;
-        }
+    private MobileElement findOperator(String operation) {
+        return (MobileElement) driver.findElement(By.id(CharacterConverter.getId(operation)));
     }
 }
