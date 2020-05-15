@@ -109,7 +109,7 @@ public class CalculatorTest extends BaseTest {
         genericSum(calculatorPage);
         String onScreenContent = calculatorPage.clear();
 
-        Assert.assertEquals(onScreenContent, null);
+        Assert.assertEquals(onScreenContent, "");
     }
 
     @AfterMethod

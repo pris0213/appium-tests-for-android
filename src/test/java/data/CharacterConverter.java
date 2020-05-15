@@ -53,9 +53,10 @@ public enum CharacterConverter {
         return null;
     }
 
-    public static String getId(String operationName) {
+    public static String getId(String operation) {
         for (CharacterConverter character : CharacterConverter.values()) {
-            if (character.getOperationName().equals(operationName)) {
+            String characterOperation = character.getOperationName();
+            if (characterOperation != null && characterOperation.equals(operation)) {
                 return character.getId();
             }
         }
