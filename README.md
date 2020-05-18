@@ -9,7 +9,7 @@ These tests are developed in Java, using Appium and TestNG.
 
 ### Java
 
-To run this project, you need to have [Java]((https://www.oracle.com/java/technologies/javase-jdk8-downloads.html)) installed to your machine.
+To run this project, you need to have [Java](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html) installed to your machine.
 Make sure you have all Java environment variables set in your computer.
 
 ### Android Studio 
