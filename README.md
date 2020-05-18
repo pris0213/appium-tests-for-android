@@ -37,11 +37,17 @@ Or you can simply download the [desktop version](https://github.com/appium/appiu
 
 ## Running tests
 
-Type the following command on your terminal:
+1. Open AVD. You can do that by typing the command bellow in your terminal:
+    ```
+    $ cd ~/Library/Android/sdk/emulator && ./emulator -avd Emulator_9
+    ```
+    Note: you need to create your AVD first.
 
-```
-$ mvn test
-```
+2. Type the following command in your terminal:
+
+    ```
+    $ mvn test
+    ```
 
 ## About Appium
 
